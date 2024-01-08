@@ -1,7 +1,8 @@
-const resolvers = {
-  Query: {
-    hello: () => "Hello world!",
-  },
-};
+import { authResolver } from "./auth";
+import { eventResolver } from "./event";
+import bookingResolver from "./booking";
+import { merge } from "lodash";
 
-module.exports = resolvers;
+const resolvers = merge(authResolver, bookingResolver, eventResolver);
+
+export default resolvers;
