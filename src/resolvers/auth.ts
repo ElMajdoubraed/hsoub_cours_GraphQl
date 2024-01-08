@@ -9,7 +9,7 @@ const authResolver = {
       if (!user) {
         throw new UserInputError("هذا الحساب غير موجود لدينا!!");
       }
-      const isEqual = await user.compare(password, user.password);
+      const isEqual = await user.isPasswordMatch(password, user.password);
       if (!isEqual) {
         throw new UserInputError("خطأ في البريد الإلكتروني أو كلمة المرور!!");
       }

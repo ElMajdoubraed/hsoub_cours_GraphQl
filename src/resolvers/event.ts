@@ -12,7 +12,7 @@ const eventResolver = {
       try {
         const events = await Event.find({})
           .sort({ created_at: "desc" })
-          .populate("creator");
+          .populate("creator", "-password");
         return events.map((event) => transformEvent(event));
       } catch (error) {
         throw error;
