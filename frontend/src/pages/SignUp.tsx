@@ -1,7 +1,7 @@
 //@ts-nocheck
 import React, { useState, useContext, useEffect } from "react";
 import { useMutation } from "@apollo/client";
-import { CREATE_USER } from "../queries";
+import { CREATE_USER } from "../graphql/queries";
 import Error from "../components/Error";
 import Spinner from "../components/Spinner";
 import AuthContext from "../context/auth-context";

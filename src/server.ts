@@ -1,22 +1,47 @@
 import express from "express";
 import { ApolloServer } from "apollo-server-express";
 import { ApolloServerPluginDrainHttpServer } from "apollo-server-core";
-import http from "http";
+import { createServer } from "http";
 import typeDefs from "./schema/index";
 import resolvers from "./resolvers/index";
+
 import dbConnect from "./config/dbConnect";
 import jwt from "jsonwebtoken";
 import User from "./models/user";
+
+import { makeExecutableSchema } from "@graphql-tools/schema";
+import { WebSocketServer } from "ws";
+import { useServer } from "graphql-ws/lib/use/ws";
 
 export async function startApolloServer(port: string) {
   await dbConnect(); // Connect to the database before starting the server
 
   const app = express();
-  const httpServer = http.createServer(app);
-  const server = new ApolloServer({
+  const httpServer = createServer(app);
+
+  app.use((req, res, next) => {
+    res.setHeader("Access-Control-Allow-Origin", process.env.APP_URL);
+    next();
+  });
+
+  app.get("/", (req, res) => {
+    res.redirect("/graphql");
+  });
+
+  const schema = makeExecutableSchema({
     typeDefs,
     resolvers,
-    plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+  });
+
+  const wsServer = new WebSocketServer({
+    server: httpServer,
+    path: "/graphql",
+  });
+
+  const serverCleanup = useServer({ schema }, wsServer);
+
+  const server = new ApolloServer({
+    schema,
     context: async ({ req }) => {
       const auth = req ? req.headers.authorization : null;
       if (auth) {
@@ -25,6 +50,18 @@ export async function startApolloServer(port: string) {
         return { user };
       }
     },
+    plugins: [
+      ApolloServerPluginDrainHttpServer({ httpServer }),
+      {
+        async serverWillStart() {
+          return {
+            async drainServer() {
+              serverCleanup.dispose();
+            },
+          };
+        },
+      },
+    ],
   });
 
   await server.start();

@@ -6,7 +6,12 @@ import {
   useApolloClient,
   useSubscription,
 } from "@apollo/client";
-import { EVENTS, BOOK_EVENT, CREATE_EVENT, EVENT_ADDED } from "../queries";
+import {
+  EVENTS,
+  BOOK_EVENT,
+  CREATE_EVENT,
+  EVENT_ADDED,
+} from "../graphql/queries";
 import EventItem from "../components/EventItem";
 import SimpleModal from "../components/SimpleModal";
 import AuthContext from "../context/auth-context";

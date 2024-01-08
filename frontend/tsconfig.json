@@ -16,5 +16,13 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": ["src"]
+  "include": ["src"],
+  "module": "CommonJS",
+  "plugins": [
+    {
+      "name": "typescript",
+      "transform": "typescript",
+      "after": ["graphql-tag/loader"]
+    }
+  ]
 }

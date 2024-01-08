@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Spinner from "../components/Spinner";
-import { BOOKINGS, CANCEL_BOOKING } from "../queries";
+import { BOOKINGS, CANCEL_BOOKING } from "../graphql/queries";
 import BookingItem from "../components/BookingItem";
 import { useQuery, useMutation, useApolloClient } from "@apollo/client";
 import Error from "../components/Error";
