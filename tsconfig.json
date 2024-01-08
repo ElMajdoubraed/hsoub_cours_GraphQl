@@ -8,5 +8,6 @@
     "outDir": "dist",
     "baseUrl": "src"
   },
+  "exclude": ["frontend"],
   "lib": ["es2015"]
 }
